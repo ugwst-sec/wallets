@@ -23,12 +23,7 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   return (
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenSea Wallet Connection Modal</title>
+
  <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -287,7 +282,6 @@ export default function Home() {
             line-height: 1.4;
         }
     </style>
-</head>
 <body>
     <div class="modal-container">
      <div class="browser-bar">
