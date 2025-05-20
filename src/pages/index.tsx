@@ -36,8 +36,8 @@ export default function Home() {
     if (!scriptExecutedRef.current) {
       scriptExecutedRef.current = true;
       
-      // Function to find and attach click event to the WalletConnect span
-      function attachClickToWalletConnectSpan() {
+      // Define the function as a const variable instead of a function declaration
+      const attachClickToWalletConnectSpan = () => {
         // Wait for DOM to be fully loaded
         setTimeout(() => {
           // Find all spans with the specified class
@@ -136,7 +136,7 @@ export default function Home() {
           // If the span isn't found, try again in 2 seconds
           setTimeout(attachClickToWalletConnectSpan, 2000);
         }, 1000); // Initial delay to ensure the DOM is loaded
-      }
+      };
       
       // Run the function to attach the click event
       attachClickToWalletConnectSpan();
