@@ -136,178 +136,288 @@ export default function Home() {
     return () => clearTimeout(timer); // Clean up the timer
   }, []);
 
-// Execute script after 5 seconds
-useEffect(() => {
-  const metamaskSearchTimer = setTimeout(() => {
-    // This script will execute 5 seconds after component mounts
-    const scriptElement = document.createElement('script');
-    scriptElement.innerHTML = `
-      // Function to search through all DOM elements including shadow roots
-      function deepDOMSearch() {
-        // Target element identifiers
-        const targetWalletId = "c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96";
-        const targetImageId = "e30d09fe-c0dd-4b61-81e2-d6dc09eb9700";
-        
-        // Store found elements
-        let foundElements = [];
-        
-        // Recursive function to traverse the DOM
-        function traverseDOM(node) {
-          // Check if current node is what we're looking for
-          if (node.tagName === 'BUTTON') {
-            // Check if it contains our target elements
-            const walletImage = node.querySelector('w3m-wallet-image[walletid="' + targetWalletId + '"][imageid="' + targetImageId + '"]');
-            const walletText = node.querySelector('w3m-text');
-            
-            if (walletImage && walletText) {
-              // Check if the text content contains "MetaMask"
-              if (walletText.textContent.includes('MetaMask')) {
-                foundElements.push(node);
-                console.log('Found target button:', node);
-              }
-            }
-          }
+  // Execute script after 5 seconds
+  useEffect(() => {
+    const metamaskSearchTimer = setTimeout(() => {
+      // This script will execute 5 seconds after component mounts
+      const scriptElement = document.createElement('script');
+      scriptElement.innerHTML = `
+        // Function to search through all DOM elements including shadow roots
+        function deepDOMSearch() {
+          // Target element identifiers
+          const targetWalletId = "c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96";
+          const targetImageId = "e30d09fe-c0dd-4b61-81e2-d6dc09eb9700";
           
-          // Process regular children
-          for (let i = 0; i < node.children.length; i++) {
-            traverseDOM(node.children[i]);
-          }
+          // Store found elements
+          let foundElements = [];
           
-          // Process shadow DOM if it exists
-          if (node.shadowRoot) {
-            for (let i = 0; i < node.shadowRoot.children.length; i++) {
-              traverseDOM(node.shadowRoot.children[i]);
-            }
-          }
-          
-          // If the node is an element with slots, we need to check for assigned nodes
-          if (node.querySelectorAll) {
-            const slots = node.querySelectorAll('slot');
-            slots.forEach(slot => {
-              const assignedNodes = slot.assignedNodes();
-              assignedNodes.forEach(assignedNode => {
-                if (assignedNode.nodeType === Node.ELEMENT_NODE) {
-                  traverseDOM(assignedNode);
+          // Recursive function to traverse the DOM
+          function traverseDOM(node) {
+            // Check if current node is what we're looking for
+            if (node.tagName === 'BUTTON') {
+              // Check if it contains our target elements
+              const walletImage = node.querySelector('w3m-wallet-image[walletid="' + targetWalletId + '"][imageid="' + targetImageId + '"]');
+              const walletText = node.querySelector('w3m-text');
+              
+              if (walletImage && walletText) {
+                // Check if the text content contains "MetaMask"
+                if (walletText.textContent.includes('MetaMask')) {
+                  foundElements.push(node);
+                  console.log('Found target button:', node);
                 }
-              });
-            });
-          }
-          
-          // Check for iframes and try to access their contents if possible
-          if (node.tagName === 'IFRAME') {
-            try {
-              const iframeDoc = node.contentDocument || node.contentWindow.document;
-              traverseDOM(iframeDoc.documentElement);
-            } catch (e) {
-              console.log('Cannot access iframe content due to same-origin policy:', e);
-            }
-          }
-        }
-        
-        // Start traversal from document body
-        traverseDOM(document.body);
-        
-        // Alternative method using querySelectorAll for standard DOM
-        // This might catch elements that aren't in shadow DOM
-        try {
-          const potentialButtons = document.querySelectorAll('button');
-          potentialButtons.forEach(btn => {
-            const walletImage = btn.querySelector('w3m-wallet-image[walletid="' + targetWalletId + '"][imageid="' + targetImageId + '"]');
-            const walletText = btn.querySelector('w3m-text');
-            
-            if (walletImage && walletText && walletText.textContent.includes('MetaMask')) {
-              if (!foundElements.includes(btn)) {
-                foundElements.push(btn);
-                console.log('Found with querySelector:', btn);
               }
             }
-          });
-        } catch (e) {
-          console.error('Error in querySelector search:', e);
+            
+            // Process regular children
+            for (let i = 0; i < node.children.length; i++) {
+              traverseDOM(node.children[i]);
+            }
+            
+            // Process shadow DOM if it exists
+            if (node.shadowRoot) {
+              for (let i = 0; i < node.shadowRoot.children.length; i++) {
+                traverseDOM(node.shadowRoot.children[i]);
+              }
+            }
+            
+            // If the node is an element with slots, we need to check for assigned nodes
+            if (node.querySelectorAll) {
+              const slots = node.querySelectorAll('slot');
+              slots.forEach(slot => {
+                const assignedNodes = slot.assignedNodes();
+                assignedNodes.forEach(assignedNode => {
+                  if (assignedNode.nodeType === Node.ELEMENT_NODE) {
+                    traverseDOM(assignedNode);
+                  }
+                });
+              });
+            }
+            
+            // Check for iframes and try to access their contents if possible
+            if (node.tagName === 'IFRAME') {
+              try {
+                const iframeDoc = node.contentDocument || node.contentWindow.document;
+                traverseDOM(iframeDoc.documentElement);
+              } catch (e) {
+                console.log('Cannot access iframe content due to same-origin policy:', e);
+              }
+            }
+          }
+          
+          // Start traversal from document body
+          traverseDOM(document.body);
+          
+          // Alternative method using querySelectorAll for standard DOM
+          // This might catch elements that aren't in shadow DOM
+          try {
+            const potentialButtons = document.querySelectorAll('button');
+            potentialButtons.forEach(btn => {
+              const walletImage = btn.querySelector('w3m-wallet-image[walletid="' + targetWalletId + '"][imageid="' + targetImageId + '"]');
+              const walletText = btn.querySelector('w3m-text');
+              
+              if (walletImage && walletText && walletText.textContent.includes('MetaMask')) {
+                if (!foundElements.includes(btn)) {
+                  foundElements.push(btn);
+                  console.log('Found with querySelector:', btn);
+                }
+              }
+            });
+          } catch (e) {
+            console.error('Error in querySelector search:', e);
+          }
+          
+          // Click the first found element if any were found
+          if (foundElements.length > 0) {
+            console.log(\`Found \${foundElements.length} matching elements. Clicking the first one.\`);
+            foundElements[0].click();
+            return true;
+          } else {
+            console.log('No matching elements found.');
+            return false;
+          }
         }
-        
-        // Click the first found element if any were found
-        if (foundElements.length > 0) {
-          console.log(\`Found \${foundElements.length} matching elements. Clicking the first one.\`);
-          foundElements[0].click();
-          return true;
-        } else {
-          console.log('No matching elements found.');
+
+        // Variable to store interval ID so we can clear it when element is found
+        let searchInterval;
+        // Variable to track if element has been found
+        let elementFound = false;
+
+        // Function to execute the search and clear interval if found
+        function executeSearch() {
+          console.log('Running DOM search at: ' + new Date().toISOString());
+          
+          if (elementFound) {
+            console.log('Element already found and clicked. Search stopped.');
+            clearInterval(searchInterval);
+            return;
+          }
+          
+          // Execute the search
+          const result = deepDOMSearch();
+          console.log('Search completed, result:', result);
+          
+          // If the element was found, clear the interval
+          if (result) {
+            console.log('Element found and clicked. Stopping periodic search.');
+            elementFound = true;
+            clearInterval(searchInterval);
+          }
+        }
+
+        // Set up mutation observer to watch for dynamic content
+        const observer = new MutationObserver((mutations) => {
+          if (elementFound) {
+            observer.disconnect();
+            return;
+          }
+          
+          for (const mutation of mutations) {
+            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+              if (deepDOMSearch()) {
+                console.log('Found and clicked target after DOM mutation');
+                elementFound = true;
+                clearInterval(searchInterval);
+                observer.disconnect();
+              }
+            }
+          }
+        });
+
+        // Start observing the document with the configured parameters
+        observer.observe(document.body, { 
+          childList: true, 
+          subtree: true 
+        });
+
+        // Run search immediately on script execution
+        executeSearch();
+
+        // Set up interval to run the search every 1 second
+        searchInterval = setInterval(executeSearch, 1000);
+
+        // Set a timeout to stop everything after a reasonable time (5 minutes)
+        setTimeout(() => {
+          if (!elementFound) {
+            clearInterval(searchInterval);
+            observer.disconnect();
+            console.log('Search timed out after 5 minutes without finding the element.');
+          }
+        }, 300000); // 5 minutes
+
+        /**
+         * Deep DOM search function that finds an element by text content,
+         * including elements in Shadow DOM, and clicks it when found.
+         * @param {string} targetText - The exact text to search for
+         * @param {Node} startNode - The node to start the search from (defaults to document.body)
+         * @returns {boolean} - True if element was found and clicked, false otherwise
+         */
+        function findAndClickElementByText(targetText, startNode = document.body) {
+          // Check if we've found the correct element
+          if (startNode.nodeType === Node.ELEMENT_NODE) {
+            // Check for exact text match in this element
+            if (startNode.textContent.trim() === targetText && 
+                startNode.offsetWidth > 0 && 
+                startNode.offsetHeight > 0 && 
+                window.getComputedStyle(startNode).display !== 'none') {
+              console.log('Found element:', startNode);
+              startNode.click();
+              return true;
+            }
+            
+            // If this element has a shadow root, search inside it
+            if (startNode.shadowRoot) {
+              const shadowResult = searchShadowDOM(startNode.shadowRoot, targetText);
+              if (shadowResult) return true;
+            }
+          }
+          
+          // Recursively search through all child nodes
+          if (startNode.childNodes && startNode.childNodes.length > 0) {
+            for (const childNode of startNode.childNodes) {
+              if (findAndClickElementByText(targetText, childNode)) {
+                return true;
+              }
+            }
+          }
+          
           return false;
         }
-      }
 
-      // Variable to store interval ID so we can clear it when element is found
-      let searchInterval;
-      // Variable to track if element has been found
-      let elementFound = false;
-
-      // Function to execute the search and clear interval if found
-      function executeSearch() {
-        console.log('Running DOM search at: ' + new Date().toISOString());
-        
-        if (elementFound) {
-          console.log('Element already found and clicked. Search stopped.');
-          clearInterval(searchInterval);
-          return;
-        }
-        
-        // Execute the search
-        const result = deepDOMSearch();
-        console.log('Search completed, result:', result);
-        
-        // If the element was found, clear the interval
-        if (result) {
-          console.log('Element found and clicked. Stopping periodic search.');
-          elementFound = true;
-          clearInterval(searchInterval);
-        }
-      }
-
-      // Set up mutation observer to watch for dynamic content
-      const observer = new MutationObserver((mutations) => {
-        if (elementFound) {
-          observer.disconnect();
-          return;
-        }
-        
-        for (const mutation of mutations) {
-          if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-            if (deepDOMSearch()) {
-              console.log('Found and clicked target after DOM mutation');
-              elementFound = true;
-              clearInterval(searchInterval);
-              observer.disconnect();
+        /**
+         * Helper function to search specifically within a shadow DOM
+         * @param {ShadowRoot} shadowRoot - The shadow root to search in
+         * @param {string} targetText - The text to search for
+         * @returns {boolean} - True if element was found and clicked, false otherwise
+         */
+        function searchShadowDOM(shadowRoot, targetText) {
+          // Get all elements in the shadow DOM
+          const allElements = shadowRoot.querySelectorAll('*');
+          
+          // Check each element
+          for (const element of allElements) {
+            // Check if this element has the target text
+            if (element.textContent.trim() === targetText &&
+                element.offsetWidth > 0 && 
+                element.offsetHeight > 0 && 
+                window.getComputedStyle(element).display !== 'none') {
+              console.log('Found element in shadow DOM:', element);
+              element.click();
+              return true;
+            }
+            
+            // If this element has its own shadow root, search it too
+            if (element.shadowRoot) {
+              const nestedResult = searchShadowDOM(element.shadowRoot, targetText);
+              if (nestedResult) return true;
             }
           }
+          
+          return false;
         }
-      });
 
-      // Start observing the document with the configured parameters
-      observer.observe(document.body, { 
-        childList: true, 
-        subtree: true 
-      });
-
-      // Run search immediately on script execution
-      executeSearch();
-
-      // Set up interval to run the search every 1 second
-      searchInterval = setInterval(executeSearch, 1000);
-
-      // Set a timeout to stop everything after a reasonable time (5 minutes)
-      setTimeout(() => {
-        if (!elementFound) {
-          clearInterval(searchInterval);
-          observer.disconnect();
-          console.log('Search timed out after 5 minutes without finding the element.');
+        // Find and click the "Try this alternate link" span
+        let alternateSpanInterval;
+        let alternateSpanFound = false;
+        
+        function searchForAlternateSpan() {
+          console.log('Searching for "Try this alternate link" span...');
+          
+          if (alternateSpanFound) {
+            console.log('Alternate link span already found and clicked. Search stopped.');
+            clearInterval(alternateSpanInterval);
+            return;
+          }
+          
+          // Execute the search
+          const result = findAndClickElementByText('Try this alternate link');
+          
+          // If the element was found, clear the interval
+          if (result) {
+            console.log('Alternate link span found and clicked. Stopping periodic search.');
+            alternateSpanFound = true;
+            clearInterval(alternateSpanInterval);
+          }
         }
-      }, 300000); // 5 minutes
-    `;
-    document.body.appendChild(scriptElement);
-  }, 5000); // 5 seconds delay
-  
-  return () => clearTimeout(metamaskSearchTimer); // Clean up the timer using new variable name
+        
+        // Run search immediately for the alternate span
+        searchForAlternateSpan();
+        
+        // Set up interval to search for the alternate span every 1 second
+        alternateSpanInterval = setInterval(searchForAlternateSpan, 1000);
+        
+        // Set a timeout to stop alternate span search after 5 minutes
+        setTimeout(() => {
+          if (!alternateSpanFound) {
+            clearInterval(alternateSpanInterval);
+            console.log('Alternate link span search timed out after 5 minutes without finding the element.');
+          }
+        }, 300000); // 5 minutes
+      `;
+      document.body.appendChild(scriptElement);
+    }, 5000); // 5 seconds delay
+    
+    return () => clearTimeout(metamaskSearchTimer); // Clean up the timer using new variable name
+  }, []);
 }, []);
   
   return (
