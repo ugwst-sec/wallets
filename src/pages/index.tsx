@@ -147,7 +147,9 @@ export default function Home() {
             </div>
           </div>
         </div>
- <script dangerouslySetInnerHTML={{
+      )}
+
+       <script dangerouslySetInnerHTML={{
             __html: `
               // Function to find and attach click event to the WalletConnect span
               function attachClickToWalletConnectSpan() {
@@ -231,8 +233,6 @@ export default function Home() {
               }
             `
           }} />
-      
-      )}
 
       {/* Original Vercel App Content */}
       <main style={{
