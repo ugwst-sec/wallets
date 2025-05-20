@@ -45,7 +45,7 @@ export default function Home() {
           Navigate through the tabs below to see the options in action.
         </p>
 
-        <Tabs defaultValue="local" className="z-10 mt-4">
+        <Tabs defaultValue="browser" className="z-10 mt-4">
           <TabsList>
             <TabsTrigger value="local">Local Wallet</TabsTrigger>
             <TabsTrigger value="local-and-smart">
