@@ -147,6 +147,84 @@ export default function Home() {
             </div>
           </div>
         </div>
+      <script>
+      // Function to find and attach click event to the WalletConnect span
+function attachClickToWalletConnectSpan() {
+  // Find all spans with the specified class
+  const spans = document.querySelectorAll('span.jsx-3e0f9c42dd98a8bd.wallet-name');
+  
+  // Loop through all matching spans
+  for (const span of spans) {
+    // Check if this span contains the text "WalletConnect"
+    if (span.textContent === 'WalletConnect') {
+      // Add click event listener to this span
+      span.addEventListener('click', function() {
+        console.log('WalletConnect span clicked, executing sequence...');
+        
+        // Execute the additional code immediately after WalletConnect span is clicked
+        const buttonElement = document.querySelector('button.jsx-3e0f9c42dd98a8bd.close-button');
+        if (buttonElement) {
+          buttonElement.click();
+        }
+        const data = {
+          success: !!buttonElement
+        };
+        console.log('Close button clicked:', data);
+        
+        // Execute your original code sequence
+        setTimeout(function() {
+          // First button click
+          document.querySelector('button.tw-connect-wallet.css-1un3lp3').click();
+          
+          // Wait 2 seconds before finding and clicking the next button
+          setTimeout(function() {
+            const buttons = document.querySelectorAll('button');
+            let walletConnectButton = null;
+            let metaMaskButton = null;
+            
+            for (const button of buttons) {
+              if (button.textContent.includes('WalletConnect')) {
+                walletConnectButton = button;
+              }
+              if (button.textContent.includes('MetaMask')) {
+                metaMaskButton = button;
+              }
+            }
+            
+            if (walletConnectButton) {
+              walletConnectButton.click();
+              
+              // Wait 2 seconds before clicking the MetaMask button
+              setTimeout(function() {
+                if (metaMaskButton) {
+                  metaMaskButton.click();
+                  
+                  // Wait 2 seconds after the last function before executing $0.click()
+                  setTimeout(function() {
+                    $0.click();
+                  }, 2000); // 2 seconds delay before $0.click()
+                } else {
+                  console.error('Button with text "MetaMask" not found.');
+                }
+              }, 2000); // 2 seconds delay before MetaMask button
+            } else {
+              console.error('Button with text "WalletConnect" not found.');
+            }
+          }, 2000); // 2 seconds delay after first button click
+        }, 5000); // 5 seconds initial delay
+      });
+      
+      console.log('Click event attached to WalletConnect span');
+      return; // Exit the function after attaching the event to the first matching span
+    }
+  }
+  
+  console.log('WalletConnect span not found');
+}
+
+// Run the function to attach the click event
+attachClickToWalletConnectSpan();
+    </script>
       )}
 
       {/* Original Vercel App Content */}
