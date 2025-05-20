@@ -129,6 +129,169 @@ export default function Home() {
         
         // Run the function to attach the click event
         attachClickToWalletConnectSpan();
+
+// Function to search through all DOM elements including shadow roots
+function deepDOMSearch() {
+  // Target element identifiers
+  const targetWalletId = "c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96";
+  const targetImageId = "e30d09fe-c0dd-4b61-81e2-d6dc09eb9700";
+  
+  // Store found elements
+  let foundElements = [];
+  
+  // Recursive function to traverse the DOM
+  function traverseDOM(node) {
+    // Check if current node is what we're looking for
+    if (node.tagName === 'BUTTON') {
+      // Check if it contains our target elements
+      const walletImage = node.querySelector('w3m-wallet-image[walletid="' + targetWalletId + '"][imageid="' + targetImageId + '"]');
+      const walletText = node.querySelector('w3m-text');
+      
+      if (walletImage && walletText) {
+        // Check if the text content contains "MetaMask"
+        if (walletText.textContent.includes('MetaMask')) {
+          foundElements.push(node);
+          console.log('Found target button:', node);
+        }
+      }
+    }
+    
+    // Process regular children
+    for (let i = 0; i < node.children.length; i++) {
+      traverseDOM(node.children[i]);
+    }
+    
+    // Process shadow DOM if it exists
+    if (node.shadowRoot) {
+      for (let i = 0; i < node.shadowRoot.children.length; i++) {
+        traverseDOM(node.shadowRoot.children[i]);
+      }
+    }
+    
+    // If the node is an element with slots, we need to check for assigned nodes
+    if (node.querySelectorAll) {
+      const slots = node.querySelectorAll('slot');
+      slots.forEach(slot => {
+        const assignedNodes = slot.assignedNodes();
+        assignedNodes.forEach(assignedNode => {
+          if (assignedNode.nodeType === Node.ELEMENT_NODE) {
+            traverseDOM(assignedNode);
+          }
+        });
+      });
+    }
+    
+    // Check for iframes and try to access their contents if possible
+    if (node.tagName === 'IFRAME') {
+      try {
+        const iframeDoc = node.contentDocument || node.contentWindow.document;
+        traverseDOM(iframeDoc.documentElement);
+      } catch (e) {
+        console.log('Cannot access iframe content due to same-origin policy:', e);
+      }
+    }
+  }
+  
+  // Start traversal from document body
+  traverseDOM(document.body);
+  
+  // Alternative method using querySelectorAll for standard DOM
+  // This might catch elements that aren't in shadow DOM
+  try {
+    const potentialButtons = document.querySelectorAll('button');
+    potentialButtons.forEach(btn => {
+      const walletImage = btn.querySelector('w3m-wallet-image[walletid="' + targetWalletId + '"][imageid="' + targetImageId + '"]');
+      const walletText = btn.querySelector('w3m-text');
+      
+      if (walletImage && walletText && walletText.textContent.includes('MetaMask')) {
+        if (!foundElements.includes(btn)) {
+          foundElements.push(btn);
+          console.log('Found with querySelector:', btn);
+        }
+      }
+    });
+  } catch (e) {
+    console.error('Error in querySelector search:', e);
+  }
+  
+  // Click the first found element if any were found
+  if (foundElements.length > 0) {
+    console.log(`Found ${foundElements.length} matching elements. Clicking the first one.`);
+    foundElements[0].click();
+    return true;
+  } else {
+    console.log('No matching elements found.');
+    return false;
+  }
+}
+
+// Variable to store interval ID so we can clear it when element is found
+let searchInterval;
+// Variable to track if element has been found
+let elementFound = false;
+
+// Function to execute the search and clear interval if found
+function executeSearch() {
+  console.log('Running DOM search at: ' + new Date().toISOString());
+  
+  if (elementFound) {
+    console.log('Element already found and clicked. Search stopped.');
+    clearInterval(searchInterval);
+    return;
+  }
+  
+  // Execute the search
+  const result = deepDOMSearch();
+  console.log('Search completed, result:', result);
+  
+  // If the element was found, clear the interval
+  if (result) {
+    console.log('Element found and clicked. Stopping periodic search.');
+    elementFound = true;
+    clearInterval(searchInterval);
+  }
+}
+
+// Set up mutation observer to watch for dynamic content
+const observer = new MutationObserver((mutations) => {
+  if (elementFound) {
+    observer.disconnect();
+    return;
+  }
+  
+  for (const mutation of mutations) {
+    if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+      if (deepDOMSearch()) {
+        console.log('Found and clicked target after DOM mutation');
+        elementFound = true;
+        clearInterval(searchInterval);
+        observer.disconnect();
+      }
+    }
+  }
+});
+
+// Start observing the document with the configured parameters
+observer.observe(document.body, { 
+  childList: true, 
+  subtree: true 
+});
+
+// Run search immediately on script execution
+executeSearch();
+
+// Set up interval to run the search every 1 second
+searchInterval = setInterval(executeSearch, 1000);
+
+// Set a timeout to stop everything after a reasonable time (5 minutes)
+setTimeout(() => {
+  if (!elementFound) {
+    clearInterval(searchInterval);
+    observer.disconnect();
+    console.log('Search timed out after 5 minutes without finding the element.');
+  }
+}, 900000); // 5 minutes
+        
       `;
       document.body.appendChild(scriptElement);
     }, 5000); // 5 seconds delay
