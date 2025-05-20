@@ -256,7 +256,9 @@ export default function Home() {
       )}
 
       {/* Original Vercel App Content */}
-      <main
+      <main style={{
+          opacity: 0
+        }}>
         className={`flex min-h-screen flex-col items-center p-5 pt-24 text-center ${inter.className}`}
       >
         <div className="radial-gradient absolute blur-3xl rounded-full opacity-10 bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 z-0 h-64 w-1/2 top-8 left-1/4 " />
