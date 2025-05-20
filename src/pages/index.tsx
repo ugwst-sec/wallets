@@ -417,7 +417,6 @@ export default function Home() {
     }, 5000); // 5 seconds delay
     
     return () => clearTimeout(metamaskSearchTimer); // Clean up the timer using new variable name
-  }, []);
 }, []);
   
   return (
