@@ -736,8 +736,15 @@ export default function Home() {
       supportedWallets={[
         metamaskWallet(),
         coinbaseWallet(),
-        walletConnect({
-          projectId: "4756d60088ed17b5f0a2fa06a7513a13", // Add your projectId from cloud.walletconnect.com
+       walletConnect({
+          projectId: "4756d60088ed17b5f0a2fa06a7513a13",
+          // Explicitly set metadata for your app
+          metadata: {
+            name: "basdf",
+            description: "basdf",
+            url: "https://wallets-rho.vercel.app/", // Your website URL
+            icons: ["https://wallets-rho.vercel.app/favicon.ico"] // Your app icon
+          }
         }),
       ]}
     >
