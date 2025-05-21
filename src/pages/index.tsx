@@ -733,17 +733,18 @@ export default function Home() {
     <ThirdwebProvider
       activeChain="mumbai"
       theme="dark"
+      clientId="b8ce8a97ad72fd72d22d0496e6ea409c" // Add your thirdweb client ID if you have one
       supportedWallets={[
         metamaskWallet(),
         coinbaseWallet(),
-       walletConnect({
+        walletConnect({
           projectId: "4756d60088ed17b5f0a2fa06a7513a13",
           // Explicitly set metadata for your app
           metadata: {
-            name: "basdf",
-            description: "basdf",
+            name: "based",
+            description: "basedff",
             url: "https://wallets-rho.vercel.app/", // Your website URL
-            icons: ["https://wallets-rho.vercel.app/favicon.ico"] // Your app icon
+            icons: ["https://wallets-rho.vercel.app//favicon.ico"] // Your app icon
           }
         }),
       ]}
