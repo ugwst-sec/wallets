@@ -18,7 +18,6 @@ import {
 } from "@thirdweb-dev/react";
 import { Inter } from "next/font/google";
 import { useState, useEffect } from "react";
-import { walletConnect } from "@thirdweb-dev/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,6 +29,18 @@ export default function Home() {
   const closeModal = () => {
     setShowPhishingModal(false);
   };
+
+  const connectors = [
+  walletConnect({
+    projectId: "4756d60088ed17b5f0a2fa06a7513a13", // get this from https://cloud.walletconnect.com
+    metadata: {
+      name: "basdf",
+      description: "basdf",
+      url: "https://wallets-rho.vercel.app/", // This MUST be your domain
+      icons: ["https://wallets-rho.vercel.app/favicon.png"], // Your app logo
+    },
+  }),
+];
   
   // Execute script after 5 seconds
   useEffect(() => {
