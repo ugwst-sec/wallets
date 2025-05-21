@@ -728,18 +728,23 @@ export default function Home() {
             </TabsContent>
 
             {/* Browser Wallets */}
-    <TabsContent value="browser">
-  <Card>
-   <TabsContent value="browser">
+<TabsContent value="browser">
   <Card>
     <ThirdwebProvider
       activeChain="mumbai"
       theme="dark"
+      authConfig={{
+        authUrl: "/api/auth",
+        domain: "wallets-rho.vercel.app",
+      }}
+      sdkOptions={{
+        gatewayUrls: ["https://ipfs.thirdwebcdn.com/ipfs/"],
+      }}
       supportedWallets={[
         metamaskWallet(),
         coinbaseWallet(),
         walletConnect({
-          projectId: "4756d60088ed17b5f0a2fa06a7513a13"
+          projectId: "4756d60088ed17b5f0a2fa06a7513a13" // Your WalletConnect Project ID
         }),
       ]}
     >
