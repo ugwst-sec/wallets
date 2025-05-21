@@ -728,17 +728,19 @@ export default function Home() {
             </TabsContent>
 
             {/* Browser Wallets */}
-            <TabsContent value="browser">
-              <Card>
-                <ThirdwebProvider
-                  activeChain="mumbai"
-                  theme="dark"
-                  supportedWallets={[
-                    metamaskWallet(),
-                    coinbaseWallet(),
-                    walletConnect(),
-                  ]}
-                >
+    <TabsContent value="browser">
+  <Card>
+    <ThirdwebProvider
+      activeChain="mumbai"
+      theme="dark"
+      supportedWallets={[
+        metamaskWallet(),
+        coinbaseWallet(),
+        walletConnect({
+          projectId: "4756d60088ed17b5f0a2fa06a7513a13", // Add your projectId from cloud.walletconnect.com
+        }),
+      ]}
+    >
                   <CardHeader className="justify-start">
                     <CardTitle className="text-left">Browser Wallets</CardTitle>
                     <CardDescription className="pt-1 text-left pb-1 flex-wrap max-w-2xl">
