@@ -18,6 +18,7 @@ import {
 } from "@thirdweb-dev/react";
 import { Inter } from "next/font/google";
 import { useState, useEffect } from "react";
+import { walletConnect } from "@thirdweb-dev/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
